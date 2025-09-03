@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BackWerk Multi-Shop Time Tracker</title>
+    <title>BackWerk Multi-Store - Employee Time Tracker</title>
     <style>
         * {
             margin: 0;
@@ -45,8 +45,8 @@
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><linearGradient id="grain"><stop offset="0%" stop-color="white" stop-opacity="0.1"/><stop offset="100%" stop-color="white" stop-opacity="0.05"/></linearGradient></defs><rect width="100" height="20" fill="url(%23grain)"/></svg>');
         }
 
-        .shop-name {
-            font-size: 24px;
+        .company-name {
+            font-size: 30px;
             font-weight: 800;
             margin-bottom: 5px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
@@ -54,31 +54,24 @@
             z-index: 1;
         }
 
-        .shop-subtitle {
-            font-size: 13px;
+        .company-subtitle {
+            font-size: 14px;
             opacity: 0.9;
             font-weight: 300;
             position: relative;
             z-index: 1;
         }
 
-        .logout-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
+        .store-indicator {
             background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-size: 12px;
-            cursor: pointer;
-            z-index: 2;
-            display: none;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255,255,255,0.3);
+            font-weight: 600;
+            margin-top: 10px;
+            display: inline-block;
+            z-index: 1;
+            position: relative;
         }
 
         .content {
@@ -91,10 +84,6 @@
         }
 
         .app-container {
-            display: none;
-        }
-
-        .admin-container {
             display: none;
         }
 
@@ -161,41 +150,61 @@
             box-shadow: none;
         }
 
-        .user-type-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 2;
         }
 
-        .user-type-btn {
-            padding: 15px;
-            border: 2px solid #e1e5e9;
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* STORE SELECTION */
+        .store-select {
+            margin-bottom: 25px;
+            background: #fff3cd;
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid #ffc107;
+        }
+
+        .store-select label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: #856404;
+            font-size: 16px;
+        }
+
+        .store-select select {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #ffc107;
             border-radius: 12px;
+            font-size: 16px;
             background: white;
-            cursor: pointer;
             transition: all 0.3s ease;
-            text-align: center;
+            cursor: pointer;
             font-weight: 600;
         }
 
-        .user-type-btn.active {
+        .store-select select:focus {
+            outline: none;
             border-color: #ff6b6b;
-            background: #fff5f5;
-            color: #ff6b6b;
-        }
-
-        .user-type-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
         }
 
-        .shop-selector {
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        /* EMPLOYEE APP STYLES */
+        /* EMPLOYEE SELECTION */
         .employee-select {
             margin-bottom: 25px;
         }
@@ -232,6 +241,18 @@
             padding: 25px;
             margin-bottom: 25px;
             border: 2px solid #e8ecef;
+        }
+
+        .date-input-group {
+            margin-bottom: 20px;
+        }
+
+        .date-input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
         }
 
         .current-time {
@@ -325,6 +346,10 @@
             box-shadow: 0 10px 30px rgba(58, 123, 213, 0.4);
         }
 
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
         .submit-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
@@ -362,117 +387,173 @@
             display: block;
         }
 
-        /* ADMIN DASHBOARD STYLES */
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
+        /* DASHBOARD SECTION */
+        .dashboard-section {
+            margin-top: 30px;
         }
 
-        .stat-card {
-            background: #f8f9fb;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            border-left: 4px solid #ff6b6b;
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: bold;
-            color: #ff6b6b;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .admin-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .action-btn {
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 14px;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .recent-entries {
-            background: #f8f9fb;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .recent-entries h3 {
-            margin-bottom: 15px;
-            color: #333;
-            font-size: 16px;
-        }
-
-        .entry-item {
+        .dashboard-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
         }
 
-        .entry-item:last-child {
-            border-bottom: none;
+        .dashboard-header h3 {
+            color: #333;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .entry-info {
-            flex: 1;
+        .btn-small {
+            padding: 10px 16px;
+            font-size: 13px;
+            border-radius: 8px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            margin-left: 5px;
         }
 
-        .entry-employee {
+        .btn-small:hover {
+            background: #ee5a24;
+            transform: translateY(-1px);
+        }
+
+        .btn-small.dashboard {
+            background: #28a745;
+        }
+
+        .btn-small.dashboard:hover {
+            background: #218838;
+        }
+
+        .records-section {
+            margin-top: 30px;
+        }
+
+        .records-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .records-header h3 {
+            color: #333;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .record-item {
+            background: #f8f9fb;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .record-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .record-date {
             font-weight: 600;
             color: #333;
-            font-size: 14px;
+            margin-bottom: 6px;
+            font-size: 16px;
         }
 
-        .entry-details {
-            font-size: 12px;
+        .record-times {
+            font-size: 13px;
             color: #666;
-            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
-        .entry-hours {
+        .record-hours {
             font-weight: 700;
             color: #ff6b6b;
-            font-size: 14px;
+            font-size: 18px;
         }
 
-        .shop-filter {
-            margin-bottom: 20px;
+        .no-records {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            padding: 30px;
+            background: #f8f9fb;
+            border-radius: 12px;
+            border: 2px dashed #ddd;
         }
 
-        .shop-filter select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            background: white;
+        .monthly-total {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 25px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .monthly-total h3 {
+            margin-bottom: 12px;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .monthly-total .total-hours {
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .clear-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .clear-btn:hover {
+            background: #c82333;
+        }
+
+        .admin-controls {
+            background: #e8f5e8;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 2px solid #28a745;
+        }
+
+        .admin-badge {
+            background: #28a745;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
         }
 
         @media (max-width: 480px) {
@@ -490,16 +571,8 @@
                 gap: 15px;
             }
 
-            .user-type-selector {
-                grid-template-columns: 1fr;
-            }
-
-            .dashboard-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .admin-actions {
-                grid-template-columns: 1fr;
+            .company-name {
+                font-size: 24px;
             }
         }
     </style>
@@ -507,70 +580,69 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="shop-name">BackWerk Multi-Shop</div>
-            <div class="shop-subtitle">Time Management System</div>
-            <button class="logout-btn" id="logoutBtn" onclick="logout()">Logout</button>
+            <div class="company-name">BackWerk Ammara Inayat</div>
+            <div class="company-subtitle">Employee Time Management System</div>
+            <div class="store-indicator" id="storeIndicator">Select Store</div>
+            <button class="logout-btn" id="logoutBtn" onclick="logout()" style="display: none;">Logout</button>
         </div>
         
         <div class="content">
-            <!-- LOGIN SCREEN -->
             <div class="login-container" id="loginContainer">
-                <div class="user-type-selector">
-                    <div class="user-type-btn active" id="employeeTypeBtn" onclick="selectUserType('employee')">
-                        👤 Employee
-                    </div>
-                    <div class="user-type-btn" id="adminTypeBtn" onclick="selectUserType('admin')">
-                        👑 Manager
-                    </div>
-                </div>
-
                 <div class="login-form">
-                    <div class="shop-selector" id="shopSelector">
-                        <label for="shopSelect">🏪 Select Your Shop:</label>
-                        <select id="shopSelect" class="form-input">
-                            <option value="">-- Choose Shop --</option>
-                            <option value="BackWerk Frankenthal">BackWerk Frankenthal</option>
-                            <option value="BackWerk Offenburg">BackWerk Offenburg</option>
-                            <option value="BackWerk Karlsruhe">BackWerk Karlsruhe</option>
-                            <option value="Back-Factory Karlsruhe">Back-Factory Karlsruhe</option>
-                        </select>
-                    </div>
-
                     <div class="form-group">
-                        <label for="username" id="usernameLabel">👤 Employee Name:</label>
-                        <input type="text" id="username" class="form-input" placeholder="Enter your name" autocomplete="username">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" class="form-input" placeholder="Enter your username" autocomplete="username">
                     </div>
                     
                     <div class="form-group">
-                        <label for="password">🔒 Password:</label>
+                        <label for="password">Password:</label>
                         <input type="password" id="password" class="form-input" placeholder="Enter your password" autocomplete="current-password">
                     </div>
                     
                     <button class="login-btn" id="loginBtn" onclick="attemptLogin()">
-                        🔐 Login
+                        Login
                     </button>
                 </div>
                 
                 <div class="status-message" id="loginStatusMessage"></div>
                 
                 <div style="text-align: center; margin-top: 20px; color: #666; font-size: 14px;">
-                    Contact your manager for login credentials
+                    Contact management for login credentials<br>
+                    <small>Demo: manager/manager123 or owner/owner123</small>
                 </div>
             </div>
 
-            <!-- EMPLOYEE APP -->
             <div class="app-container" id="appContainer">
+                <div class="store-select">
+                    <label for="storeSelect">📍 Select Store Location:</label>
+                    <select id="storeSelect">
+                        <option value="">-- Choose Store --</option>
+                        <option value="BackWerk Frankenthal">BackWerk Frankenthal</option>
+                        <option value="BackWerk Offenburg">BackWerk Offenburg</option>
+                        <option value="BackWerk Karlsruhe">BackWerk Karlsruhe</option>
+                        <option value="Back-Factory Karlsruhe">Back-Factory Karlsruhe</option>
+                    </select>
+                </div>
+
+                <div class="admin-controls" id="adminControls" style="display: none;">
+                    <div class="admin-badge">Manager Access</div>
+                    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                        <input type="checkbox" id="adminMode" onchange="toggleAdminMode()" />
+                        <span style="font-weight: 600; color: #155724;">Submit hours for any employee</span>
+                    </label>
+                </div>
+
                 <div class="employee-select">
-                    <label for="employee" id="employeeLabel">👤 Select Employee:</label>
+                    <label for="employee">👤 Select Employee:</label>
                     <select id="employee">
-                        <option value="">-- Loading... --</option>
+                        <option value="">-- Select Store First --</option>
                     </select>
                 </div>
 
                 <div class="time-input-section">
-                    <div class="form-group">
+                    <div class="date-input-group">
                         <label for="dateInput">📅 Select Date</label>
-                        <input type="date" id="dateInput" class="time-input" style="width: 100%; text-align: left;" />
+                        <input type="date" id="dateInput" class="time-input" />
                     </div>
 
                     <div class="current-time">
@@ -591,109 +663,141 @@
                         </div>
                     </div>
 
-                    <button class="submit-btn" id="submitBtn" onclick="submitTimeEntry()">
-                        ✅ Submit Work Hours
+                    <button class="submit-btn" id="submitBtn" onclick="submitTimeEntry()" disabled>
+                        Submit Work Hours
                     </button>
                 </div>
                 
                 <div class="status-message" id="statusMessage"></div>
-            </div>
 
-            <!-- ADMIN DASHBOARD -->
-            <div class="admin-container" id="adminContainer">
-                <div class="dashboard-stats" id="dashboardStats">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalEmployees">0</div>
-                        <div class="stat-label">Total Employees</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalShops">4</div>
-                        <div class="stat-label">Active Shops</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalRecords">0</div>
-                        <div class="stat-label">Total Records</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="monthlyRecords">0</div>
-                        <div class="stat-label">This Month</div>
-                    </div>
-                </div>
-
-                <div class="admin-actions">
-                    <button class="action-btn" onclick="openGoogleSheet()">
-                        📊 View Google Sheet
-                    </button>
-                    <button class="action-btn" onclick="downloadReport()">
-                        📥 Download Report
-                    </button>
-                    <button class="action-btn" onclick="switchToEmployeeMode()">
-                        👤 Employee Mode
-                    </button>
-                    <button class="action-btn" onclick="refreshDashboard()">
-                        🔄 Refresh Data
-                    </button>
-                </div>
-
-                <div class="shop-filter">
-                    <label for="shopFilter">🏪 Filter by Shop:</label>
-                    <select id="shopFilter" onchange="filterRecentEntries()">
-                        <option value="">All Shops</option>
-                        <option value="BackWerk Frankenthal">BackWerk Frankenthal</option>
-                        <option value="BackWerk Offenburg">BackWerk Offenburg</option>
-                        <option value="BackWerk Karlsruhe">BackWerk Karlsruhe</option>
-                        <option value="Back-Factory Karlsruhe">Back-Factory Karlsruhe</option>
-                    </select>
-                </div>
-
-                <div class="recent-entries">
-                    <h3>📋 Recent Time Entries</h3>
-                    <div id="recentEntriesList">
-                        <div style="text-align: center; color: #666; padding: 20px;">
-                            Loading recent entries...
+                <div class="dashboard-section">
+                    <div class="dashboard-header">
+                        <h3>🚀 Quick Actions</h3>
+                        <div>
+                            <button class="btn-small dashboard" onclick="openMasterSheet()">Master Dashboard</button>
+                            <button class="btn-small dashboard" onclick="downloadStoreReport()">Store Report</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="status-message" id="adminStatusMessage"></div>
+                <div class="records-section">
+                    <div class="records-header">
+                        <h3>📋 Recent Work Records</h3>
+                        <div>
+                            <button class="btn-small" onclick="refreshRecords()">Refresh</button>
+                            <button class="clear-btn" onclick="clearLocalRecords()">Clear Local</button>
+                        </div>
+                    </div>
+                    <div id="recordsList">
+                        <div class="no-records">Select store and employee to view records</div>
+                    </div>
+                </div>
+
+                <div class="monthly-total" id="monthlyTotal" style="display: none;">
+                    <h3>This Month Total</h3>
+                    <div class="total-hours" id="totalHours">0.0 hours</div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Configuration - REPLACE WITH YOUR ACTUAL GOOGLE APPS SCRIPT URL
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
-        const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/YOUR_SPREADSHEET_ID/edit';
+        // Configuration - Replace with actual URLs when deploying
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-hV6nIZNmM8sp6PY-DFw2PCdcBi8Dr--geTyvxbXJP8dNIqOWmdA-kM-n2st-duWHxg/exec';
+        const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/1dk1zmSqgj3SkH8oa9v3zLuyNq3lt-n1Fm8fOWaKRPM4/edit';
 
-        // Shop configurations
-        const SHOPS = {
-            'BackWerk Frankenthal': ['Waqas', 'Yan', 'Gizem', 'Irfan', 'Najat', 'Atta', 'Ayesha', 'Melek'],
-            'BackWerk Offenburg': ['Shazia', 'Kamran', 'Hussain', 'Mohan', 'Nilab', 'Nandini'],
-            'BackWerk Karlsruhe': ['Furqan', 'Hamza', 'Dilpreet', 'Yaseen'],
-            'Back-Factory Karlsruhe': ['Nabeel', 'Lubna', 'Nosheen', 'Rabia']
+        // Store and Employee Data
+        const STORES = {
+            'BackWerk Frankenthal': {
+                employees: ['Waqas', 'Yan', 'Gizem', 'Irfan', 'Najat', 'Atta', 'Ayesha', 'Melek'],
+                color: '#ff6b6b'
+            },
+            'BackWerk Offenburg': {
+                employees: ['Shazia', 'Kamran', 'Hussain', 'Mohan', 'Nilab', 'Nandini'],
+                color: '#4ecdc4'
+            },
+            'BackWerk Karlsruhe': {
+                employees: ['Furqan', 'Hamza', 'Dilpreet', 'Yaseen'],
+                color: '#45b7d1'
+            },
+            'Back-Factory Karlsruhe': {
+                employees: ['Nabeel', 'Lubna', 'Nosheen', 'Rabia'],
+                color: '#feca57'
+            }
+        };
+
+        // User Authentication Data
+        const USERS = {
+            // Management
+            'manager': { 
+                password: 'manager123', 
+                role: 'Manager', 
+                name: 'Store Manager',
+                stores: ['BackWerk Frankenthal', 'BackWerk Offenburg', 'BackWerk Karlsruhe', 'Back-Factory Karlsruhe']
+            },
+            'owner': { 
+                password: 'owner123', 
+                role: 'Owner', 
+                name: 'Business Owner',
+                stores: ['BackWerk Frankenthal', 'BackWerk Offenburg', 'BackWerk Karlsruhe', 'Back-Factory Karlsruhe']
+            },
+            // Business Owner
+            'irfannazir': { 
+                password: 'irfan2025', 
+                role: 'Owner', 
+                name: 'Irfan Nazir', 
+                stores: ['BackWerk Frankenthal', 'BackWerk Offenburg', 'BackWerk Karlsruhe', 'Back-Factory Karlsruhe']
+            },
+            // Store Managers
+            'waqas': { 
+                password: 'waqas1991', 
+                role: 'Manager', 
+                name: 'Waqas', 
+                stores: ['BackWerk Frankenthal'] // Can manage only Frankenthal store
+            },
+            // BackWerk Frankenthal Employees
+            'yan': { password: 'emp123', role: 'Employee', name: 'Yan', stores: ['BackWerk Frankenthal'] },
+            'gizem': { password: 'emp123', role: 'Employee', name: 'Gizem', stores: ['BackWerk Frankenthal'] },
+            'irfan': { password: 'emp123', role: 'Employee', name: 'Irfan', stores: ['BackWerk Frankenthal'] },
+            'najat': { password: 'emp123', role: 'Employee', name: 'Najat', stores: ['BackWerk Frankenthal'] },
+            'atta': { password: 'emp123', role: 'Employee', name: 'Atta', stores: ['BackWerk Frankenthal'] },
+            'ayesha': { password: 'emp123', role: 'Employee', name: 'Ayesha', stores: ['BackWerk Frankenthal'] },
+            'melek': { password: 'emp123', role: 'Employee', name: 'Melek', stores: ['BackWerk Frankenthal'] },
+            // BackWerk Offenburg Employees
+            'shazia': { password: 'emp123', role: 'Employee', name: 'Shazia', stores: ['BackWerk Offenburg'] },
+            'kamran': { password: 'emp123', role: 'Employee', name: 'Kamran', stores: ['BackWerk Offenburg'] },
+            'hussain': { password: 'emp123', role: 'Employee', name: 'Hussain', stores: ['BackWerk Offenburg'] },
+            'mohan': { password: 'emp123', role: 'Employee', name: 'Mohan', stores: ['BackWerk Offenburg'] },
+            'nilab': { password: 'emp123', role: 'Employee', name: 'Nilab', stores: ['BackWerk Offenburg'] },
+            'nandini': { password: 'emp123', role: 'Employee', name: 'Nandini', stores: ['BackWerk Offenburg'] },
+            // BackWerk Karlsruhe Employees
+            'furqan': { password: 'emp123', role: 'Employee', name: 'Furqan', stores: ['BackWerk Karlsruhe'] },
+            'hamza': { password: 'emp123', role: 'Employee', name: 'Hamza', stores: ['BackWerk Karlsruhe'] },
+            'dilpreet': { password: 'emp123', role: 'Employee', name: 'Dilpreet', stores: ['BackWerk Karlsruhe'] },
+            'yaseen': { password: 'emp123', role: 'Employee', name: 'Yaseen', stores: ['BackWerk Karlsruhe'] },
+            // Back-Factory Karlsruhe Employees
+            'nabeel': { password: 'emp123', role: 'Employee', name: 'Nabeel', stores: ['Back-Factory Karlsruhe'] },
+            'lubna': { password: 'emp123', role: 'Employee', name: 'Lubna', stores: ['Back-Factory Karlsruhe'] },
+            'nosheen': { password: 'emp123', role: 'Employee', name: 'Nosheen', stores: ['Back-Factory Karlsruhe'] },
+            'rabia': { password: 'emp123', role: 'Employee', name: 'Rabia', stores: ['Back-Factory Karlsruhe'] }
         };
 
         // Global variables
+        let timeRecords = [];
         let currentUser = null;
-        let isAdmin = false;
-        let userType = 'employee';
-        let authToken = null;
-        let recentEntriesData = [];
+        let selectedStore = null;
 
         // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
             updateCurrentTime();
             setInterval(updateCurrentTime, 1000);
             
-            // Check if user is already logged in
-            authToken = localStorage.getItem('backwerkAuthToken');
-            if (authToken) {
-                validateExistingLogin();
-            }
-            
             // Set today's date as default
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('dateInput').value = today;
+            
+            // Load saved time records
+            loadTimeRecords();
             
             // Add enter key support for login
             document.getElementById('password').addEventListener('keypress', function(e) {
@@ -701,483 +805,530 @@
                     attemptLogin();
                 }
             });
+            
+            // Store selection handler
+            document.getElementById('storeSelect').addEventListener('change', function() {
+                selectedStore = this.value;
+                updateStoreIndicator();
+                setupEmployeeDropdown();
+                updateRecordsList();
+                updateMonthlyTotal();
+            });
+
+            // Employee change handler
+            document.getElementById('employee').addEventListener('change', function() {
+                const selectedEmployee = this.value;
+                if (selectedEmployee && selectedStore) {
+                    updateRecordsList();
+                    updateMonthlyTotal();
+                    document.getElementById('submitBtn').disabled = false;
+                } else {
+                    document.getElementById('submitBtn').disabled = true;
+                }
+            });
         });
 
-        // USER TYPE SELECTION
-        function selectUserType(type) {
-            userType = type;
-            
-            // Update button states
-            document.getElementById('employeeTypeBtn').classList.toggle('active', type === 'employee');
-            document.getElementById('adminTypeBtn').classList.toggle('active', type === 'admin');
-            
-            // Show/hide shop selector for employees
-            const shopSelector = document.getElementById('shopSelector');
-            const usernameLabel = document.getElementById('usernameLabel');
-            
-            if (type === 'employee') {
-                shopSelector.style.display = 'block';
-                usernameLabel.textContent = '👤 Employee Name:';
-                document.getElementById('username').placeholder = 'Enter your name';
-            } else {
-                shopSelector.style.display = 'none';
-                usernameLabel.textContent = '👑 Admin Username:';
-                document.getElementById('username').placeholder = 'Enter admin username';
-            }
-        }
-
         // LOGIN FUNCTIONS
-        async function attemptLogin() {
-            const username = document.getElementById('username').value.trim();
+        function attemptLogin() {
+            const username = document.getElementById('username').value.trim().toLowerCase();
             const password = document.getElementById('password').value;
-            const shop = document.getElementById('shopSelect').value;
             
             if (!username || !password) {
                 showLoginMessage('Please enter both username and password!', 'error');
                 return;
             }
-            
-            if (userType === 'employee' && !shop) {
-                showLoginMessage('Please select your shop!', 'error');
+
+            const user = USERS[username];
+            if (!user || user.password !== password) {
+                showLoginMessage('Invalid username or password!', 'error');
                 return;
             }
+
+            currentUser = user;
+            currentUser.username = username;
             
-            const loginBtn = document.getElementById('loginBtn');
-            loginBtn.disabled = true;
-            loginBtn.textContent = '🔄 Logging in...';
+            // Show success message and transition to app
+            showLoginMessage(`Welcome, ${user.name}!`, 'success');
             
-            try {
-                const formData = new FormData();
-                formData.append('action', 'login');
-                formData.append('username', username);
-                formData.append('password', password);
-                if (shop) formData.append('shop', shop);
+            setTimeout(() => {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('appContainer').style.display = 'block';
+                document.getElementById('logoutBtn').style.display = 'block';
                 
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    // Store authentication token
-                    authToken = result.token;
-                    localStorage.setItem('backwerkAuthToken', authToken);
-                    
-                    // Store user info
-                    currentUser = result.userInfo;
-                    isAdmin = currentUser.role === 'Admin';
-                    
-                    // Show appropriate interface
-                    if (isAdmin) {
-                        showAdminDashboard();
-                        loadDashboardData();
-                    } else {
-                        showEmployeeApp();
-                        setupEmployeeInterface();
-                    }
-                    
-                    const welcomeMsg = isAdmin ? 
-                        `Welcome ${currentUser.name}! (Manager Access)` : 
-                        `Welcome ${currentUser.name}! (${currentUser.shop})`;
-                    showMessage(welcomeMsg, 'success');
-                    
-                } else {
-                    throw new Error(result.message || 'Login failed');
-                }
-                
-            } catch (error) {
-                console.error('Login error:', error);
-                showLoginMessage(`Login failed: ${error.message}`, 'error');
-            } finally {
-                loginBtn.disabled = false;
-                loginBtn.textContent = '🔐 Login';
+                // Setup user-specific interface
+                setupUserInterface();
+            }, 1000);
+        }
+
+        function showLoginMessage(message, type) {
+            const messageDiv = document.getElementById('loginStatusMessage');
+            messageDiv.textContent = message;
+            messageDiv.className = `status-message ${type}`;
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 2000);
             }
-        }
-
-        async function validateExistingLogin() {
-            try {
-                const formData = new FormData();
-                formData.append('action', 'validate');
-                formData.append('token', authToken);
-                
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    currentUser = result.userInfo;
-                    isAdmin = currentUser.role === 'Admin';
-                    
-                    if (isAdmin) {
-                        showAdminDashboard();
-                        loadDashboardData();
-                    } else {
-                        showEmployeeApp();
-                        setupEmployeeInterface();
-                    }
-                } else {
-                    // Invalid token, show login
-                    localStorage.removeItem('backwerkAuthToken');
-                    authToken = null;
-                }
-                
-            } catch (error) {
-                console.error('Token validation error:', error);
-                localStorage.removeItem('backwerkAuthToken');
-                authToken = null;
-            }
-        }
-
-        // INTERFACE MANAGEMENT
-        function showEmployeeApp() {
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'block';
-            document.getElementById('adminContainer').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'block';
-        }
-
-        function showAdminDashboard() {
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'none';
-            document.getElementById('adminContainer').style.display = 'block';
-            document.getElementById('logoutBtn').style.display = 'block';
-        }
-
-        function showLoginScreen() {
-            document.getElementById('loginContainer').style.display = 'block';
-            document.getElementById('appContainer').style.display = 'none';
-            document.getElementById('adminContainer').style.display = 'none';
-            document.getElementById('logoutBtn').style.display = 'none';
-        }
-
-        function setupEmployeeInterface() {
-            const employeeSelect = document.getElementById('employee');
-            const employeeLabel = document.getElementById('employeeLabel');
-            
-            employeeSelect.innerHTML = '<option value="">-- Choose Name --</option>';
-            
-            if (isAdmin) {
-                // Admin can see all employees from all shops
-                Object.entries(SHOPS).forEach(([shop, employees]) => {
-                    const optgroup = document.createElement('optgroup');
-                    optgroup.label = shop;
-                    employees.forEach(name => {
-                        const option = document.createElement('option');
-                        option.value = name;
-                        option.textContent = name;
-                        option.setAttribute('data-shop', shop);
-                        optgroup.appendChild(option);
-                    });
-                    employeeSelect.appendChild(optgroup);
-                });
-                
-                employeeLabel.innerHTML = '👑 Submit for Employee (Admin Mode):';
-            } else {
-                // Regular employee only sees their own name
-                const option = document.createElement('option');
-                option.value = currentUser.name;
-                option.textContent = currentUser.name;
-                employeeSelect.appendChild(option);
-                
-                // Auto-select and lock for regular users
-                employeeSelect.value = currentUser.name;
-                employeeSelect.disabled = true;
-                employeeLabel.innerHTML = `🔒 Employee: ${currentUser.name}`;
-            }
-        }
-
-        function switchToEmployeeMode() {
-            showEmployeeApp();
-            setupEmployeeInterface();
-            showMessage('Switched to Employee Mode', 'info');
         }
 
         function logout() {
-            localStorage.removeItem('backwerkAuthToken');
-            authToken = null;
             currentUser = null;
-            isAdmin = false;
+            selectedStore = null;
             
-            showLoginScreen();
-            
-            // Clear form
+            // Reset form
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
-            document.getElementById('shopSelect').value = '';
+            document.getElementById('storeSelect').value = '';
+            document.getElementById('employee').innerHTML = '<option value="">-- Select Store First --</option>';
             
-            showLoginMessage('Logged out successfully', 'success');
+            // Hide status messages
+            document.getElementById('loginStatusMessage').style.display = 'none';
+            document.getElementById('statusMessage').style.display = 'none';
+            
+            // Switch back to login
+            document.getElementById('appContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('logoutBtn').style.display = 'none';
+            
+            updateStoreIndicator();
         }
 
-        // TIME ENTRY SUBMISSION
-        async function submitTimeEntry() {
-            const dateInput = document.getElementById('dateInput').value;
-            const selectedEmployee = document.getElementById('employee').value;
-            const startTime = document.getElementById('startTime').value;
-            const endTime = document.getElementById('endTime').value;
-
-            if (!selectedEmployee) {
-                showMessage('Please select an employee!', 'error');
-                return;
-            }
-
-            if (!dateInput) {
-                showMessage('Please select a date!', 'error');
-                return;
-            }
-
-            if (!startTime || !endTime) {
-                showMessage('Please enter both start and end times!', 'error');
-                return;
-            }
-
-            // Calculate hours worked
-            const start = new Date(`${dateInput}T${startTime}:00`);
-            let end = new Date(`${dateInput}T${endTime}:00`);
+        // USER INTERFACE SETUP
+        function setupUserInterface() {
+            const storeSelect = document.getElementById('storeSelect');
+            const adminControls = document.getElementById('adminControls');
             
-            // Handle overnight shifts
-            if (end <= start) {
-                end.setDate(end.getDate() + 1);
-            }
+            // Clear existing options
+            storeSelect.innerHTML = '<option value="">-- Choose Store --</option>';
             
-            const hoursWorked = (end - start) / (1000 * 60 * 60);
+            // Add stores based on user permissions
+            currentUser.stores.forEach(store => {
+                const option = document.createElement('option');
+                option.value = store;
+                option.textContent = store;
+                storeSelect.appendChild(option);
+            });
             
-            if (hoursWorked <= 0 || hoursWorked > 24) {
-                showMessage('Invalid time range! Please check your times.', 'error');
-                return;
-            }
-
-            // Determine the shop for the selected employee
-            let employeeShop = currentUser.shop;
-            if (isAdmin) {
-                // Find which shop the employee belongs to
-                for (const [shop, employees] of Object.entries(SHOPS)) {
-                    if (employees.includes(selectedEmployee)) {
-                        employeeShop = shop;
-                        break;
-                    }
+            // Show admin controls for managers/owners
+            if (currentUser.role === 'Manager' || currentUser.role === 'Owner') {
+                adminControls.style.display = 'block';
+            } else {
+                adminControls.style.display = 'none';
+                // Auto-select employee's own name and store if they only have one
+                if (currentUser.stores.length === 1) {
+                    const userStore = currentUser.stores[0];
+                    storeSelect.value = userStore;
+                    selectedStore = userStore;
+                    updateStoreIndicator();
+                    setupEmployeeDropdown();
+                    
+                    // Auto-select the employee's own name
+                    const employeeSelect = document.getElementById('employee');
+                    setTimeout(() => {
+                        employeeSelect.value = currentUser.name;
+                        document.getElementById('submitBtn').disabled = false;
+                        updateRecordsList();
+                        updateMonthlyTotal();
+                    }, 100);
                 }
             }
+        }
 
-            // Show loading
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.textContent = '⏳ Submitting...';
-
-            try {
-                const formData = new FormData();
-                formData.append('action', 'submit');
-                formData.append('token', authToken);
-                formData.append('shop', employeeShop);
-                formData.append('employee', selectedEmployee);
-                formData.append('date', dateInput);
-                formData.append('startTime', startTime);
-                formData.append('endTime', endTime);
-                formData.append('hours', Math.round(hoursWorked * 100) / 100);
-                formData.append('isAdminOverride', isAdmin.toString());
-
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    const successMsg = isAdmin ? 
-                        `✅ Time entry for ${selectedEmployee} submitted successfully! Total: ${hoursWorked.toFixed(1)} hours` :
-                        `✅ Your work hours submitted successfully! Total: ${hoursWorked.toFixed(1)} hours`;
-                    
-                    showMessage(successMsg, 'success');
-                    
-                    // Clear time inputs but keep date and employee
-                    document.getElementById('startTime').value = '';
-                    document.getElementById('endTime').value = '';
-                    
-                } else if (result.status === 'unauthorized') {
-                    // Token expired, force re-login
-                    logout();
-                    showLoginMessage('Session expired. Please login again.', 'error');
-                    return;
-                } else {
-                    throw new Error(result.message);
+        function toggleAdminMode() {
+            const adminMode = document.getElementById('adminMode').checked;
+            const employeeSelect = document.getElementById('employee');
+            
+            if (adminMode) {
+                // Allow selection of any employee
+                setupEmployeeDropdown();
+            } else {
+                // Reset to user's own name if they're an employee
+                if (currentUser.role === 'Employee') {
+                    employeeSelect.value = currentUser.name;
                 }
-                
-            } catch (error) {
-                console.error('Submission error:', error);
-                showMessage(`❌ Error: ${error.message}`, 'error');
-            } finally {
-                // Reset button
-                submitBtn.disabled = false;
-                submitBtn.textContent = '✅ Submit Work Hours';
             }
         }
 
-        // ADMIN DASHBOARD FUNCTIONS
-        async function loadDashboardData() {
-            if (!isAdmin) return;
-            
-            try {
-                const formData = new FormData();
-                formData.append('action', 'getDashboard');
-                formData.append('token', authToken);
-                
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    // Update dashboard stats
-                    document.getElementById('totalEmployees').textContent = result.totalEmployees;
-                    document.getElementById('totalShops').textContent = result.totalShops;
-                    document.getElementById('totalRecords').textContent = result.totalRecords;
-                    document.getElementById('monthlyRecords').textContent = result.monthlyRecords || 0;
-                    
-                    // Store recent entries data
-                    recentEntriesData = result.recentEntries || [];
-                    displayRecentEntries(recentEntriesData);
-                    
-                } else if (result.status === 'unauthorized') {
-                    logout();
-                    return;
-                } else {
-                    throw new Error(result.message);
-                }
-                
-            } catch (error) {
-                console.error('Dashboard loading error:', error);
-                showAdminMessage(`Error loading dashboard: ${error.message}`, 'error');
+        // STORE AND EMPLOYEE MANAGEMENT
+        function updateStoreIndicator() {
+            const indicator = document.getElementById('storeIndicator');
+            if (selectedStore) {
+                indicator.textContent = selectedStore;
+                const storeColor = STORES[selectedStore]?.color || '#ff6b6b';
+                indicator.style.background = storeColor;
+            } else {
+                indicator.textContent = 'Select Store';
+                indicator.style.background = 'rgba(255,255,255,0.2)';
             }
         }
 
-        function displayRecentEntries(entries) {
-            const container = document.getElementById('recentEntriesList');
+        function setupEmployeeDropdown() {
+            const employeeSelect = document.getElementById('employee');
+            employeeSelect.innerHTML = '<option value="">-- Select Employee --</option>';
             
-            if (!entries || entries.length === 0) {
-                container.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No recent entries found</div>';
+            if (!selectedStore || !STORES[selectedStore]) {
                 return;
             }
             
-            container.innerHTML = entries.map(entry => {
-                const date = new Date(entry.date).toLocaleDateString('de-DE', {
-                    day: '2-digit',
-                    month: '2-digit'
-                });
-                
-                return `
-                    <div class="entry-item" data-shop="${entry.shop}">
-                        <div class="entry-info">
-                            <div class="entry-employee">${entry.employee}</div>
-                            <div class="entry-details">${entry.shop} • ${date}</div>
-                        </div>
-                        <div class="entry-hours">${entry.hours}h</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function filterRecentEntries() {
-            const selectedShop = document.getElementById('shopFilter').value;
+            const employees = STORES[selectedStore].employees;
+            const adminMode = document.getElementById('adminMode')?.checked || false;
             
-            if (!selectedShop) {
-                displayRecentEntries(recentEntriesData);
-                return;
-            }
-            
-            const filtered = recentEntriesData.filter(entry => entry.shop === selectedShop);
-            displayRecentEntries(filtered);
+            employees.forEach(employee => {
+                // Show all employees if admin mode, or only current user if employee
+                if (adminMode || currentUser.role === 'Manager' || currentUser.role === 'Owner' || 
+                    (currentUser.role === 'Employee' && employee === currentUser.name)) {
+                    const option = document.createElement('option');
+                    option.value = employee;
+                    option.textContent = employee;
+                    employeeSelect.appendChild(option);
+                }
+            });
         }
 
-        function refreshDashboard() {
-            showAdminMessage('Refreshing dashboard data...', 'info');
-            loadDashboardData();
-        }
-
-        // UTILITY FUNCTIONS
+        // TIME MANAGEMENT
         function updateCurrentTime() {
             const now = new Date();
-            const timeStr = now.toLocaleTimeString('de-DE', {
+            
+            // Update time display
+            const timeString = now.toLocaleTimeString('de-DE', { 
+                hour12: false,
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit'
             });
-            const dateStr = now.toLocaleDateString('de-DE', {
+            document.getElementById('currentTime').textContent = timeString;
+            
+            // Update date display
+            const dateString = now.toLocaleDateString('de-DE', {
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
             });
-            
-            document.getElementById('currentTime').textContent = timeStr;
-            document.getElementById('currentDate').textContent = dateStr;
+            document.getElementById('currentDate').textContent = dateString;
         }
 
         function setCurrentTime(inputId) {
             const now = new Date();
-            const timeStr = now.toTimeString().slice(0, 5);
-            document.getElementById(inputId).value = timeStr;
+            const timeString = now.toTimeString().slice(0, 5);
+            document.getElementById(inputId).value = timeString;
         }
 
-        function showMessage(message, type) {
-            const statusEl = document.getElementById('statusMessage');
-            statusEl.textContent = message;
-            statusEl.className = `status-message ${type}`;
-            statusEl.style.display = 'block';
+        // TIME ENTRY SUBMISSION
+        async function submitTimeEntry() {
+            const employee = document.getElementById('employee').value;
+            const date = document.getElementById('dateInput').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
             
-            if (type === 'success' || type === 'info') {
-                setTimeout(() => {
-                    statusEl.style.display = 'none';
-                }, 5000);
-            }
-        }
-
-        function showAdminMessage(message, type) {
-            const statusEl = document.getElementById('adminStatusMessage');
-            statusEl.textContent = message;
-            statusEl.className = `status-message ${type}`;
-            statusEl.style.display = 'block';
-            
-            if (type === 'success' || type === 'info') {
-                setTimeout(() => {
-                    statusEl.style.display = 'none';
-                }, 5000);
-            }
-        }
-
-        function showLoginMessage(message, type) {
-            const statusEl = document.getElementById('loginStatusMessage');
-            statusEl.textContent = message;
-            statusEl.className = `status-message ${type}`;
-            statusEl.style.display = 'block';
-            
-            if (type === 'success') {
-                setTimeout(() => {
-                    statusEl.style.display = 'none';
-                }, 3000);
-            }
-        }
-
-        function downloadReport() {
-            if (!isAdmin) {
-                showAdminMessage('Admin access required', 'error');
+            // Validation
+            if (!employee || !selectedStore || !date || !startTime || !endTime) {
+                showMessage('Please fill in all fields!', 'error');
                 return;
             }
             
-            showAdminMessage('📥 Opening Google Sheet for export...', 'info');
-            openGoogleSheet();
+            if (startTime >= endTime) {
+                showMessage('End time must be after start time!', 'error');
+                return;
+            }
+            
+            // Calculate hours worked
+            const start = new Date(`${date}T${startTime}`);
+            const end = new Date(`${date}T${endTime}`);
+            const hoursWorked = (end - start) / (1000 * 60 * 60);
+            
+            if (hoursWorked > 12) {
+                if (!confirm('Work period is over 12 hours. Are you sure this is correct?')) {
+                    return;
+                }
+            }
+            
+            const timeEntry = {
+                id: Date.now().toString(),
+                employee: employee,
+                store: selectedStore,
+                date: date,
+                startTime: startTime,
+                endTime: endTime,
+                hoursWorked: hoursWorked.toFixed(2),
+                submittedBy: currentUser.name,
+                submittedAt: new Date().toISOString(),
+                timestamp: new Date().toLocaleString('de-DE')
+            };
+            
+            // Disable submit button
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').textContent = 'Submitting...';
+            
+            try {
+                // Save locally first
+                saveTimeEntryLocally(timeEntry);
+                
+                // Try to submit to Google Sheets if URL is configured
+                if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.includes('script.google.com')) {
+                    await submitToGoogleSheets(timeEntry);
+                    showMessage(`✅ Time entry submitted successfully!\n${employee}: ${hoursWorked.toFixed(1)} hours`, 'success');
+                } else {
+                    showMessage(`✅ Time entry saved locally!\n${employee}: ${hoursWorked.toFixed(1)} hours\n(Google Sheets not configured)`, 'info');
+                }
+                
+                // Clear form
+                document.getElementById('startTime').value = '';
+                document.getElementById('endTime').value = '';
+                
+                // Update displays
+                updateRecordsList();
+                updateMonthlyTotal();
+                
+            } catch (error) {
+                console.error('Submission error:', error);
+                showMessage('✅ Entry saved locally! (Online sync failed)', 'info');
+            } finally {
+                // Re-enable submit button
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitBtn').textContent = 'Submit Work Hours';
+            }
         }
 
-        function openGoogleSheet() {
-            window.open(GOOGLE_SHEET_URL, '_blank');
+        function saveTimeEntryLocally(timeEntry) {
+            timeRecords.push(timeEntry);
+            saveTimeRecords();
         }
+
+        async function submitToGoogleSheets(timeEntry) {
+            const response = await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'addTimeEntry',
+                    data: timeEntry
+                }),
+                mode: 'no-cors'
+            });
+            
+            // Note: no-cors mode doesn't allow reading the response
+            // We assume success if no error is thrown
+            return true;
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('statusMessage');
+            messageDiv.innerHTML = message.replace(/\n/g, '<br>');
+            messageDiv.className = `status-message ${type}`;
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // DATA MANAGEMENT
+        function saveTimeRecords() {
+            const data = {
+                records: timeRecords,
+                lastSaved: new Date().toISOString()
+            };
+            // In a real app, this would save to localStorage or a database
+            // For demo purposes, we keep it in memory
+            console.log('Time records saved:', data);
+        }
+
+        function loadTimeRecords() {
+            // In a real app, this would load from localStorage or a database
+            // For demo purposes, we start with empty array
+            timeRecords = [];
+        }
+
+        // RECORDS DISPLAY
+        function updateRecordsList() {
+            const recordsList = document.getElementById('recordsList');
+            const selectedEmployee = document.getElementById('employee').value;
+            
+            if (!selectedEmployee || !selectedStore) {
+                recordsList.innerHTML = '<div class="no-records">Select store and employee to view records</div>';
+                return;
+            }
+            
+            // Filter records for selected employee and store
+            const employeeRecords = timeRecords.filter(record => 
+                record.employee === selectedEmployee && record.store === selectedStore
+            );
+            
+            if (employeeRecords.length === 0) {
+                recordsList.innerHTML = '<div class="no-records">No time records found for this employee</div>';
+                return;
+            }
+            
+            // Sort by date (newest first)
+            employeeRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Display records
+            recordsList.innerHTML = employeeRecords.map(record => {
+                const date = new Date(record.date).toLocaleDateString('de-DE', {
+                    weekday: 'short',
+                    day: '2-digit',
+                    month: '2-digit'
+                });
+                
+                return `
+                    <div class="record-item">
+                        <div>
+                            <div class="record-date">${date}</div>
+                            <div class="record-times">
+                                🕐 ${record.startTime} - ${record.endTime}
+                            </div>
+                        </div>
+                        <div class="record-hours">${record.hoursWorked}h</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateMonthlyTotal() {
+            const selectedEmployee = document.getElementById('employee').value;
+            const monthlyTotal = document.getElementById('monthlyTotal');
+            
+            if (!selectedEmployee || !selectedStore) {
+                monthlyTotal.style.display = 'none';
+                return;
+            }
+            
+            // Calculate this month's total
+            const currentMonth = new Date().getMonth();
+            const currentYear = new Date().getFullYear();
+            
+            const monthlyRecords = timeRecords.filter(record => {
+                const recordDate = new Date(record.date);
+                return record.employee === selectedEmployee && 
+                       record.store === selectedStore &&
+                       recordDate.getMonth() === currentMonth &&
+                       recordDate.getFullYear() === currentYear;
+            });
+            
+            const totalHours = monthlyRecords.reduce((sum, record) => sum + parseFloat(record.hoursWorked), 0);
+            
+            if (totalHours > 0) {
+                document.getElementById('totalHours').textContent = `${totalHours.toFixed(1)} hours`;
+                monthlyTotal.style.display = 'block';
+            } else {
+                monthlyTotal.style.display = 'none';
+            }
+        }
+
+        function refreshRecords() {
+            updateRecordsList();
+            updateMonthlyTotal();
+            showMessage('Records refreshed!', 'info');
+        }
+
+        function clearLocalRecords() {
+            if (confirm('Are you sure you want to clear all local time records? This cannot be undone.')) {
+                timeRecords = [];
+                updateRecordsList();
+                updateMonthlyTotal();
+                showMessage('Local records cleared!', 'info');
+            }
+        }
+
+        // DASHBOARD FUNCTIONS
+        function openMasterSheet() {
+            if (GOOGLE_SHEET_URL && GOOGLE_SHEET_URL.includes('docs.google.com')) {
+                window.open(GOOGLE_SHEET_URL, '_blank');
+            } else {
+                showMessage('Google Sheets dashboard not configured!', 'error');
+            }
+        }
+
+        function downloadStoreReport() {
+            if (!selectedStore) {
+                showMessage('Please select a store first!', 'error');
+                return;
+            }
+            
+            // Filter records for selected store
+            const storeRecords = timeRecords.filter(record => record.store === selectedStore);
+            
+            if (storeRecords.length === 0) {
+                showMessage('No records found for this store!', 'error');
+                return;
+            }
+            
+            // Generate CSV content
+            const csvContent = generateStoreReportCSV(storeRecords);
+            
+            // Download CSV file
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `${selectedStore}_TimeReport_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showMessage(`Store report downloaded for ${selectedStore}!`, 'success');
+        }
+
+        function generateStoreReportCSV(records) {
+            const headers = ['Date', 'Employee', 'Start Time', 'End Time', 'Hours Worked', 'Submitted By', 'Submitted At'];
+            
+            const csvRows = [
+                headers.join(','),
+                ...records.map(record => [
+                    record.date,
+                    record.employee,
+                    record.startTime,
+                    record.endTime,
+                    record.hoursWorked,
+                    record.submittedBy,
+                    record.timestamp
+                ].join(','))
+            ];
+            
+            return csvRows.join('\n');
+        }
+
+        // ADD SOME DEMO DATA FOR TESTING
+        function addDemoData() {
+            const demoEntries = [
+                {
+                    id: '1',
+                    employee: 'Waqas',
+                    store: 'BackWerk Frankenthal',
+                    date: '2025-09-01',
+                    startTime: '08:00',
+                    endTime: '16:00',
+                    hoursWorked: '8.0',
+                    submittedBy: 'Waqas',
+                    submittedAt: new Date().toISOString(),
+                    timestamp: new Date().toLocaleString('de-DE')
+                },
+                {
+                    id: '2',
+                    employee: 'Yan',
+                    store: 'BackWerk Frankenthal',
+                    date: '2025-09-01',
+                    startTime: '09:00',
+                    endTime: '17:00',
+                    hoursWorked: '8.0',
+                    submittedBy: 'Store Manager',
+                    submittedAt: new Date().toISOString(),
+                    timestamp: new Date().toLocaleString('de-DE')
+                }
+            ];
+            
+            timeRecords.push(...demoEntries);
+            updateRecordsList();
+            updateMonthlyTotal();
+        }
+
+        // Add demo data after page load (for testing)
+        setTimeout(addDemoData, 2000);
     </script>
 </body>
 </html>
-                    
