@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BackWerk Owner Dashboard - Business Analytics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #9b59b6 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .owner-logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        .header-text h1 {
+            font-size: 32px;
+            font-weight: 900;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-text p {
+            color: #7f8c8d;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            border: 2px solid rgba(44, 62, 80, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        .financial-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .financial-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .financial-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .financial-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .revenue-icon {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+        }
+
+        .cost-icon {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+
+        .profit-icon {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+
+        .efficiency-icon {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+        }
+
+        .financial-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .financial-label {
+            color: #7f8c8d;
+            font-size: 14px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .financial-change {
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .change-positive {
+            color: #27ae60;
+        }
+
+        .change-negative {
+            color: #e74c3c;
+        }
+
+        .analytics-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .analytics-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+
+        .store-performance {
+            grid-column: 1 / -1;
+            margin-bottom: 30px;
+        }
+
+        .store-performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .store-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .store-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+        }
+
+        .store-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .store-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .store-revenue {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .store-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 15px;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 10px;
+        }
+
+        .metric-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+
+        .comprehensive-reports {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .report-card {
+            background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 100%);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .report-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .report-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .report-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .report-description {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .alert-system {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid;
+        }
+
+        .alert-critical {
+            background: rgba(231, 76, 60, 0.1);
+            border-left-color: #e74c3c;
+        }
+
+        .alert-warning {
+            background: rgba(243, 156, 18, 0.1);
+            border-left-color: #f39c12;
+        }
+
+        .alert-info {
+            background: rgba(52, 152, 219, 0.1);
+            border-left-color: #3498db;
+        }
+
+        .alert-icon {
+            font-size: 20px;
+            margin-right: 15px;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .alert-message {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .spinner-large {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #ecf0f1;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1024px) {
+            .analytics-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .financial-overview {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .financial-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .store-performance-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="header-title">
+                    <div class="owner-logo">AI</div>
+                    <div class="header-text">
+                        <h1>BackWerk Business Analytics</h1>
+                        <p>Executive Dashboard - Financial Performance & Insights</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="refreshAnalytics()">
+                        Refresh Data
+                    </button>
+                    <button class="btn btn-primary" onclick="openManagerDashboard()">
+                        Manager View
+                    </button>
+                    <button class="btn btn-success" onclick="exportFinancialReport()">
+                        Export Analytics
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Overview -->
+        <div class="financial-overview">
+            <div class="financial-card">
+                <div class="financial-icon revenue-icon">€</div>
+                <div class="financial-amount" id="totalRevenue">€0</div>
+                <div class="financial-label">Total Revenue</div>
+                <div class="financial-change change-positive" id="revenueChange">+0% from last month</div>
+            </div>
+            
+            <div class="financial-card">
+                <div class="financial-icon cost-icon">💸</div>
+                <div class="financial-amount" id="totalCosts">€0</div>
+                <div class="financial-label">Labor Costs</div>
+                <div class="financial-change change-negative" id="costsChange">+0% from last month</div>
+            </div>
+            
+            <div class="financial-card">
+                <div class="financial-icon profit-icon">💰</div>
+                <div class="financial-amount" id="netProfit">€0</div>
+                <div class="financial-label">Net Profit</div>
+                <div class="financial-change change-positive" id="profitChange">+0% from last month</div>
+            </div>
+            
+            <div class="financial-card">
+                <div class="financial-icon efficiency-icon">⚡</div>
+                <div class="financial-amount" id="efficiency">0%</div>
+                <div class="financial-label">Labor Efficiency</div>
+                <div class="financial-change change-positive" id="efficiencyChange">+0% from last month</div>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="analytics-section">
+            <div class="analytics-card">
+                <div class="card-header">
+                    <h3 class="card-title">📈 Revenue Trends</h3>
+                    <select id="revenueTimeframe" onchange="updateRevenueChart()">
+                        <option value="7days">Last 7 Days</option>
+                        <option value="30days" selected>Last 30 Days</option>
+                        <option value="90days">Last 90 Days</option>
+                        <option value="12months">Last 12 Months</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="revenueChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+            
+            <div class="analytics-card">
+                <div class="card-header">
+                    <h3 class="card-title">⏰ Labor Cost Analysis</h3>
+                    <button class="btn btn-secondary" onclick="updateCostChart()">Refresh</button>
+                </div>
+                <div class="chart-container">
+                    <canvas id="costChart" width="400" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Store Performance -->
+        <div class="analytics-card store-performance">
+            <div class="card-header">
+                <h3 class="card-title">🏪 Store Performance Comparison</h3>
+                <div>
+                    <button class="btn btn-secondary" onclick="exportStoreComparison()">Export Report</button>
+                </div>
+            </div>
+            <div class="store-performance-grid" id="storePerformanceGrid">
+                <!-- Store performance cards will be generated here -->
+            </div>
+        </div>
+
+        <!-- Comprehensive Reports -->
+        <div class="comprehensive-reports">
+            <div class="card-header">
+                <h3 class="card-title">📊 Business Intelligence Reports</h3>
+            </div>
+            <div class="reports-grid">
+                <div class="report-card" onclick="generateProfitabilityReport()">
+                    <div class="report-icon">💹</div>
+                    <div class="report-title">Profitability Analysis</div>
+                    <div class="report-description">Detailed profit margins by store and time period</div>
+                </div>
+                
+                <div class="report-card" onclick="generateLaborReport()">
+                    <div class="report-icon">👥</div>
+                    <div class="report-title">Labor Analytics</div>
+                    <div class="report-description">Employee productivity and cost optimization</div>
+                </div>
+                
+                <div class="report-card" onclick="generateTrendReport()">
+                    <div class="report-icon">📈</div>
+                    <div class="report-title">Trend Analysis</div>
+                    <div class="report-description">Historical performance and forecasting</div>
+                </div>
+                
+                <div class="report-card" onclick="generateComplianceReport()">
+                    <div class="report-icon">✅</div>
+                    <div class="report-title">Compliance Report</div>
+                    <div class="report-description">Labor law compliance and overtime analysis</div>
+                </div>
+                
+                <div class="report-card" onclick="generateBenchmarkReport()">
+                    <div class="report-icon">🎯</div>
+                    <div class="report-title">Benchmarking</div>
+                    <div class="report-description">Performance vs industry standards</div>
+                </div>
+                
+                <div class="report-card" onclick="generateForecastReport()">
+                    <div class="report-icon">🔮</div>
+                    <div class="report-title">Financial Forecast</div>
+                    <div class="report-description">Predictive analytics and budgeting</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alert System -->
+        <div class="alert-system">
+            <div class="card-header">
+                <h3 class="card-title">⚠️ Business Alerts & Notifications</h3>
+                <button class="btn btn-secondary" onclick="refreshAlerts()">Refresh Alerts</button>
+            </div>
+            <div id="alertsList">
+                <!-- Alerts will be dynamically generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner-large"></div>
+            <h3>Processing Analytics...</h3>
+            <p>Calculating financial metrics and performance data</p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw8SHqhj-H7ooxZT5TXGzZfZPWvcgcCMkskdN2rQDLmRGI_qmqpw5YQx6PIx_rCt6cJxA/exec';
+        const MANAGER_DASHBOARD_URL = 'manager-dashboard.html'; // Update with actual URL
+
+        // Financial Configuration (in Euros)
+        const HOURLY_RATES = {
+            'BackWerk Frankenthal': 12.50,
+            'BackWerk Offenburg': 12.00,
+            'BackWerk Karlsruhe': 13.00,
+            'Back-Factory Karlsruhe': 12.75
+        };
+
+        const REVENUE_PER_HOUR = {
+            'BackWerk Frankenthal': 45.00,
+            'BackWerk Offenburg': 42.00,
+            'BackWerk Karlsruhe': 48.00,
+            'Back-Factory Karlsruhe': 46.50
+        };
+
+        // Store Configuration
+        const STORES = {
+            'BackWerk Frankenthal': {
+                employees: ['Waqas', 'Yan', 'Gizem', 'Irfan', 'Najat', 'Atta', 'Ayesha', 'Melek'],
+                color: '#ff6b6b'
+            },
+            'BackWerk Offenburg': {
+                employees: ['Shazia', 'Kamran', 'Hussain', 'Mohan', 'Nilab', 'Nandini'],
+                color: '#4ecdc4'
+            },
+            'BackWerk Karlsruhe': {
+                employees: ['Furqan', 'Hamza', 'Dilpreet', 'Yaseen'],
+                color: '#45b7d1'
+            },
+            'Back-Factory Karlsruhe': {
+                employees: ['Nabeel', 'Lubna', 'Nosheen', 'Rabia'],
+                color: '#feca57'
+            }
+        };
+
+        // Global data storage
+        let businessData = {
+            timeRecords: [],
+            financialMetrics: {},
+            alerts: []
+        };
+
+        // Initialize the owner dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing Owner Dashboard...');
+            generateSampleBusinessData();
+            initializeAnalytics();
+            updateAllMetrics();
+        });
+
+        function generateSampleBusinessData() {
+            const today = new Date();
+            const sampleData = [];
+            
+            // Generate 90 days of sample data
+            for (let i = 0; i < 90; i++) {
+                const date = new Date(today.getTime() - (i * 24 * 60 * 60 * 1000));
+                const dateString = date.toISOString().split('T')[0];
+                
+                Object.keys(STORES).forEach(storeName => {
+                    const employees = STORES[storeName].employees;
+                    const workingEmployees = employees.slice(0, Math.floor(Math.random() * employees.length) + 2);
+                    
+                    workingEmployees.forEach(employee => {
+                        if (Math.random() > 0.2) { // 80% chance of working
+                            const startHour = 7 + Math.floor(Math.random() * 4);
+                            const workHours = 6 + Math.random() * 4;
+                            const endHour = startHour + workHours;
+                            
+                            sampleData.push({
+                                id: `business_${Date.now()}_${Math.random()}`,
+                                date: dateString,
+                                store: storeName,
+                                employee: employee,
+                                startTime: `${startHour.toString().padStart(2, '0')}:${(Math.floor(Math.random() * 60)).toString().padStart(2, '0')}`,
+                                endTime: `${Math.floor(endHour).toString().padStart(2, '0')}:${((endHour % 1) * 60).toString().padStart(2, '0')}`,
+                                hoursWorked: workHours.toFixed(2),
+                                hourlyRate: HOURLY_RATES[storeName],
+                                revenueGenerated: (workHours * REVENUE_PER_HOUR[storeName]).toFixed(2),
+                                submittedBy: Math.random() > 0.7 ? 'Manager' : employee,
+                                submittedAt: new Date().toISOString()
+                            });
+                        }
+                    });
+                });
+            }
+            
+            businessData.timeRecords = sampleData;
+            console.log(`Generated ${sampleData.length} sample business records`);
+        }
+
+        function initializeAnalytics() {
+            calculateFinancialMetrics();
+            generateBusinessAlerts();
+            updateStorePerformance();
+        }
+
+        function calculateFinancialMetrics() {
+            const records = businessData.timeRecords;
+            const thisMonth = new Date().getMonth();
+            const thisYear = new Date().getFullYear();
+            const lastMonth = thisMonth === 0 ? 11 : thisMonth - 1;
+            const lastMonthYear = thisMonth === 0 ? thisYear - 1 : thisYear;
+            
+            // Current month metrics
+            const currentMonthRecords = records.filter(r => {
+                const recordDate = new Date(r.date);
+                return recordDate.getMonth() === thisMonth && recordDate.getFullYear() === thisYear;
+            });
+            
+            // Last month metrics for comparison
+            const lastMonthRecords = records.filter(r => {
+                const recordDate = new Date(r.date);
+                return recordDate.getMonth() === lastMonth && recordDate.getFullYear() === lastMonthYear;
+            });
+            
+            const currentRevenue = currentMonthRecords.reduce((sum, r) => sum + parseFloat(r.revenueGenerated), 0);
+            const currentCosts = currentMonthRecords.reduce((sum, r) => sum + (parseFloat(r.hoursWorked) * r.hourlyRate), 0);
+            const currentProfit = currentRevenue - currentCosts;
+            
+            const lastRevenue = lastMonthRecords.reduce((sum, r) => sum + parseFloat(r.revenueGenerated), 0);
+            const lastCosts = lastMonthRecords.reduce((sum, r) => sum + (parseFloat(r.hoursWorked) * r.hourlyRate), 0);
+            const lastProfit = lastRevenue - lastCosts;
+            
+            businessData.financialMetrics = {
+                currentRevenue,
+                currentCosts,
+                currentProfit,
+                efficiency: currentRevenue > 0 ? ((currentProfit / currentRevenue) * 100).toFixed(1) : 0,
+                revenueChange: lastRevenue > 0 ? (((currentRevenue - lastRevenue) / lastRevenue) * 100).toFixed(1) : 0,
+                costsChange: lastCosts > 0 ? (((currentCosts - lastCosts) / lastCosts) * 100).toFixed(1) : 0,
+                profitChange: lastProfit > 0 ? (((currentProfit - lastProfit) / lastProfit) * 100).toFixed(1) : 0,
+                efficiencyChange: 0 // Simplified for demo
+            };
+        }
+
+        function updateAllMetrics() {
+            const metrics = businessData.financialMetrics;
+            
+            // Update financial cards
+            document.getElementById('totalRevenue').textContent = `€${metrics.currentRevenue.toLocaleString('de-DE', {maximumFractionDigits: 0})}`;
+            document.getElementById('totalCosts').textContent = `€${metrics.currentCosts.toLocaleString('de-DE', {maximumFractionDigits: 0})}`;
+            document.getElementById('netProfit').textContent = `€${metrics.currentProfit.toLocaleString('de-DE', {maximumFractionDigits: 0})}`;
+            document.getElementById('efficiency').textContent = `${metrics.efficiency}%`;
+            
+            // Update change indicators
+            document.getElementById('revenueChange').textContent = `${metrics.revenueChange > 0 ? '+' : ''}${metrics.revenueChange}% from last month`;
+            document.getElementById('revenueChange').className = `financial-change ${metrics.revenueChange >= 0 ? 'change-positive' : 'change-negative'}`;
+            
+            document.getElementById('costsChange').textContent = `${metrics.costsChange > 0 ? '+' : ''}${metrics.costsChange}% from last month`;
+            document.getElementById('costsChange').className = `financial-change ${metrics.costsChange <= 0 ? 'change-positive' : 'change-negative'}`;
+            
+            document.getElementById('profitChange').textContent = `${metrics.profitChange > 0 ? '+' : ''}${metrics.profitChange}% from last month`;
+            document.getElementById('profitChange').className = `financial-change ${metrics.profitChange >= 0 ? 'change-positive' : 'change-negative'}`;
+        }
+
+        function updateStorePerformance() {
+            const container = document.getElementById('storePerformanceGrid');
+            container.innerHTML = '';
+            
+            Object.keys(STORES).forEach(storeName => {
+                const storeRecords = businessData.timeRecords.filter(r => r.store === storeName);
+                const thisMonthRecords = storeRecords.filter(r => {
+                    const recordDate = new Date(r.date);
+                    const thisMonth = new Date().getMonth();
+                    const thisYear = new Date().getFullYear();
+                    return recordDate.getMonth() === thisMonth && recordDate.getFullYear() === thisYear;
+                });
+                
+                const revenue = thisMonthRecords.reduce((sum, r) => sum + parseFloat(r.revenueGenerated), 0);
+                const costs = thisMonthRecords.reduce((sum, r) => sum + (parseFloat(r.hoursWorked) * r.hourlyRate), 0);
+                const profit = revenue - costs;
+                const totalHours = thisMonthRecords.reduce((sum, r) => sum + parseFloat(r.hoursWorked), 0);
+                const avgHourlyProfit = totalHours > 0 ? (profit / totalHours).toFixed(2) : 0;
+                
+                const storeCard = document.createElement('div');
+                storeCard.className = 'store-card';
+                storeCard.style.borderLeft = `4px solid ${STORES[storeName].color}`;
+                
+                storeCard.innerHTML = `
+                    <div class="store-header">
+                        <div class="store-name">${storeName}</div>
+                        <div class="store-revenue">€${revenue.toLocaleString('de-DE', {maximumFractionDigits: 0})}</div>
+                    </div>
+                    <div class="store-metrics">
+                        <div class="metric">
+                            <div class="metric-value">${totalHours.toFixed(0)}</div>
+                            <div class="metric-label">Hours Worked</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">€${costs.toLocaleString('de-DE', {maximumFractionDigits: 0})}</div>
+                            <div class="metric-label">Labor Costs</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">€${profit.toLocaleString('de-DE', {maximumFractionDigits: 0})}</div>
+                            <div class="metric-label">Net Profit</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-value">€${avgHourlyProfit}</div>
+                            <div class="metric-label">Profit/Hour</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="drillDownStore('${storeName}')">
+                        View Detailed Analysis
+                    </button>
+                `;
+                
+                container.appendChild(storeCard);
+            });
+        }
+
+        function generateBusinessAlerts() {
+            const alerts = [];
+            const records = businessData.timeRecords;
+            const metrics = businessData.financialMetrics;
+            
+            // Revenue alert
+            if (metrics.revenueChange < -10) {
+                alerts.push({
+                    type: 'critical',
+                    icon: '🚨',
+                    title: 'Revenue Decline Alert',
+                    message: `Revenue has decreased by ${Math.abs(metrics.revenueChange)}% compared to last month`
+                });
+            }
+            
+            // High labor costs alert
+            if (metrics.efficiency < 15) {
+                alerts.push({
+                    type: 'warning',
+                    icon: '⚠️',
+                    title: 'Labor Efficiency Warning',
+                    message: `Labor efficiency is below 15%. Consider optimizing staff schedules.`
+                });
+            }
+            
+            // Overtime alert
+            const overtimeRecords = records.filter(r => parseFloat(r.hoursWorked) > 8);
+            if (overtimeRecords.length > records.length * 0.1) {
+                alerts.push({
+                    type: 'warning',
+                    icon: '⏰',
+                    title: 'Excessive Overtime',
+                    message: `${(overtimeRecords.length / records.length * 100).toFixed(1)}% of shifts exceed 8 hours`
+                });
+            }
+            
+            // Positive performance alert
+            if (metrics.profitChange > 15) {
+                alerts.push({
+                    type: 'info',
+                    icon: '📈',
+                    title: 'Strong Performance',
+                    message: `Profits have increased by ${metrics.profitChange}% this month. Excellent work!`
+                });
+            }
+            
+            businessData.alerts = alerts;
+            updateAlertsDisplay();
+        }
+
+        function updateAlertsDisplay() {
+            const container = document.getElementById('alertsList');
+            const alerts = businessData.alerts;
+            
+            if (alerts.length === 0) {
+                container.innerHTML = `
+                    <div class="alert-item alert-info">
+                        <div class="alert-icon">✅</div>
+                        <div class="alert-content">
+                            <div class="alert-title">All Systems Normal</div>
+                            <div class="alert-message">No critical business alerts at this time</div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = alerts.map(alert => `
+                <div class="alert-item alert-${alert.type}">
+                    <div class="alert-icon">${alert.icon}</div>
+                    <div class="alert-content">
+                        <div class="alert-title">${alert.title}</div>
+                        <div class="alert-message">${alert.message}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Dashboard Actions
+        function refreshAnalytics() {
+            showLoading(true);
+            
+            setTimeout(() => {
+                calculateFinancialMetrics();
+                generateBusinessAlerts();
+                updateAllMetrics();
+                updateStorePerformance();
+                showLoading(false);
+                showNotification('Analytics refreshed successfully!', 'success');
+            }, 2000);
+        }
+
+        function openManagerDashboard() {
+            if (MANAGER_DASHBOARD_URL) {
+                window.open(MANAGER_DASHBOARD_URL, '_blank');
+            } else {
+                showNotification('Manager dashboard URL not configured', 'warning');
+            }
+        }
+
+        function exportFinancialReport() {
+            const data = businessData.timeRecords;
+            const metrics = businessData.financialMetrics;
+            
+            // Generate comprehensive financial report
+            let csvContent = "BackWerk Financial Analysis Report\n";
+            csvContent += `Generated: ${new Date().toLocaleDateString('de-DE')}\n\n`;
+            csvContent += "FINANCIAL SUMMARY\n";
+            csvContent += `Total Revenue,€${metrics.currentRevenue.toFixed(2)}\n`;
+            csvContent += `Total Costs,€${metrics.currentCosts.toFixed(2)}\n`;
+            csvContent += `Net Profit,€${metrics.currentProfit.toFixed(2)}\n`;
+            csvContent += `Efficiency,${metrics.efficiency}%\n\n`;
+            csvContent += "DETAILED RECORDS\n";
+            csvContent += "Date,Store,Employee,Hours,Labor Cost,Revenue Generated,Profit\n";
+            
+            data.forEach(record => {
+                const laborCost = parseFloat(record.hoursWorked) * record.hourlyRate;
+                const profit = parseFloat(record.revenueGenerated) - laborCost;
+                csvContent += `${record.date},${record.store},${record.employee},${record.hoursWorked},€${laborCost.toFixed(2)},€${record.revenueGenerated},€${profit.toFixed(2)}\n`;
+            });
+            
+            downloadFile(csvContent, 'backwerk_financial_report.csv', 'text/csv');
+            showNotification('Financial report exported successfully!', 'success');
+        }
+
+        // Report Generation Functions
+        function generateProfitabilityReport() {
+            showLoading(true);
+            setTimeout(() => {
+                const reportData = analyzeProfitability();
+                displayReportModal('Profitability Analysis', formatProfitabilityReport(reportData));
+                showLoading(false);
+            }, 1500);
+        }
+
+        function generateLaborReport() {
+            showLoading(true);
+            setTimeout(() => {
+                const reportData = analyzeLaborMetrics();
+                displayReportModal('Labor Analytics', formatLaborReport(reportData));
+                showLoading(false);
+            }, 1500);
+        }
+
+        function generateTrendReport() {
+            showLoading(true);
+            setTimeout(() => {
+                const reportData = analyzeTrends();
+                displayReportModal('Trend Analysis', formatTrendReport(reportData));
+                showLoading(false);
+            }, 1500);
+        }
+
+        function generateComplianceReport() {
+            showLoading(true);
+            setTimeout(() => {
+                const reportData = analyzeCompliance();
+                displayReportModal('Compliance Report', formatComplianceReport(reportData));
+                showLoading(false);
+            }, 1500);
+        }
+
+        function generateBenchmarkReport() {
+            showLoading(true);
+            setTimeout(() => {
+                const reportData = analyzeBenchmarks();
+                displayReportModal('Benchmarking Analysis', formatBenchmarkReport(reportData));
+                showLoading(false);
+            }, 1500);
+        }
+
+        function generateForecastReport() {
+            showLoading(true);
+            setTimeout(() => {
+                const reportData = generateForecast();
+                displayReportModal('Financial Forecast', formatForecastReport(reportData));
+                showLoading(false);
+            }, 1500);
+        }
+
+        // Analysis Functions
+        function analyzeProfitability() {
+            const records = businessData.timeRecords;
+            const storeAnalysis = {};
+            
+            Object.keys(STORES).forEach(store => {
+                const storeRecords = records.filter(r => r.store === store);
+                const revenue = storeRecords.reduce((sum, r) => sum + parseFloat(r.revenueGenerated), 0);
+                const costs = storeRecords.reduce((sum, r) => sum + (parseFloat(r.hoursWorked) * r.hourlyRate), 0);
+                const profit = revenue - costs;
+                const margin = revenue > 0 ? ((profit / revenue) * 100).toFixed(2) : 0;
+                
+                storeAnalysis[store] = {
+                    revenue: revenue.toFixed(2),
+                    costs: costs.toFixed(2),
+                    profit: profit.toFixed(2),
+                    margin: margin
+                };
+            });
+            
+            return storeAnalysis;
+        }
+
+        function analyzeLaborMetrics() {
+            const records = businessData.timeRecords;
+            const employeeAnalysis = {};
+            
+            records.forEach(record => {
+                if (!employeeAnalysis[record.employee]) {
+                    employeeAnalysis[record.employee] = {
+                        totalHours: 0,
+                        totalCost: 0,
+                        totalRevenue: 0,
+                        store: record.store,
+                        shifts: 0
+                    };
+                }
+                
+                const emp = employeeAnalysis[record.employee];
+                emp.totalHours += parseFloat(record.hoursWorked);
+                emp.totalCost += parseFloat(record.hoursWorked) * record.hourlyRate;
+                emp.totalRevenue += parseFloat(record.revenueGenerated);
+                emp.shifts += 1;
+            });
+            
+            // Calculate productivity metrics
+            Object.keys(employeeAnalysis).forEach(emp => {
+                const data = employeeAnalysis[emp];
+                data.avgHoursPerShift = (data.totalHours / data.shifts).toFixed(2);
+                data.revenuePerHour = (data.totalRevenue / data.totalHours).toFixed(2);
+                data.productivity = ((data.totalRevenue - data.totalCost) / data.totalHours).toFixed(2);
+            });
+            
+            return employeeAnalysis;
+        }
+
+        function analyzeTrends() {
+            const records = businessData.timeRecords;
+            const monthlyData = {};
+            
+            records.forEach(record => {
+                const date = new Date(record.date);
+                const monthKey = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+                
+                if (!monthlyData[monthKey]) {
+                    monthlyData[monthKey] = {
+                        revenue: 0,
+                        costs: 0,
+                        hours: 0,
+                        shifts: 0
+                    };
+                }
+                
+                monthlyData[monthKey].revenue += parseFloat(record.revenueGenerated);
+                monthlyData[monthKey].costs += parseFloat(record.hoursWorked) * record.hourlyRate;
+                monthlyData[monthKey].hours += parseFloat(record.hoursWorked);
+                monthlyData[monthKey].shifts += 1;
+            });
+            
+            return monthlyData;
+        }
+
+        function analyzeCompliance() {
+            const records = businessData.timeRecords;
+            const complianceData = {
+                overtimeShifts: 0,
+                totalShifts: records.length,
+                excessiveHours: 0,
+                weekendWork: 0,
+                complianceScore: 0
+            };
+            
+            records.forEach(record => {
+                const hours = parseFloat(record.hoursWorked);
+                const date = new Date(record.date);
+                const dayOfWeek = date.getDay();
+                
+                if (hours > 8) complianceData.overtimeShifts++;
+                if (hours > 10) complianceData.excessiveHours++;
+                if (dayOfWeek === 0 || dayOfWeek === 6) complianceData.weekendWork++;
+            });
+            
+            // Calculate compliance score (simplified)
+            const overtimeRate = complianceData.overtimeShifts / complianceData.totalShifts;
+            complianceData.complianceScore = Math.max(0, 100 - (overtimeRate * 100)).toFixed(1);
+            
+            return complianceData;
+        }
+
+        function analyzeBenchmarks() {
+            // Industry benchmarks (example data)
+            const industryBenchmarks = {
+                avgRevenuePerHour: 43.50,
+                avgLaborCostPercentage: 28.5,
+                avgProfitMargin: 12.8,
+                avgHoursPerEmployee: 32.4
+            };
+            
+            const metrics = businessData.financialMetrics;
+            const records = businessData.timeRecords;
+            
+            const totalHours = records.reduce((sum, r) => sum + parseFloat(r.hoursWorked), 0);
+            const totalEmployees = new Set(records.map(r => r.employee)).size;
+            const avgRevenuePerHour = totalHours > 0 ? (metrics.currentRevenue / totalHours).toFixed(2) : 0;
+            const laborCostPercentage = metrics.currentRevenue > 0 ? ((metrics.currentCosts / metrics.currentRevenue) * 100).toFixed(1) : 0;
+            
+            return {
+                industry: industryBenchmarks,
+                actual: {
+                    avgRevenuePerHour: avgRevenuePerHour,
+                    laborCostPercentage: laborCostPercentage,
+                    profitMargin: metrics.efficiency,
+                    avgHoursPerEmployee: (totalHours / totalEmployees).toFixed(1)
+                }
+            };
+        }
+
+        function generateForecast() {
+            const metrics = businessData.financialMetrics;
+            const growthRate = parseFloat(metrics.revenueChange) / 100;
+            
+            // Simple linear forecast for next 3 months
+            const forecast = {
+                nextMonth: {
+                    revenue: (metrics.currentRevenue * (1 + growthRate)).toFixed(0),
+                    costs: (metrics.currentCosts * 1.02).toFixed(0), // Assume 2% cost increase
+                },
+                twoMonths: {
+                    revenue: (metrics.currentRevenue * Math.pow(1 + growthRate, 2)).toFixed(0),
+                    costs: (metrics.currentCosts * Math.pow(1.02, 2)).toFixed(0),
+                },
+                threeMonths: {
+                    revenue: (metrics.currentRevenue * Math.pow(1 + growthRate, 3)).toFixed(0),
+                    costs: (metrics.currentCosts * Math.pow(1.02, 3)).toFixed(0),
+                }
+            };
+            
+            // Calculate projected profits
+            Object.keys(forecast).forEach(period => {
+                forecast[period].profit = (forecast[period].revenue - forecast[period].costs).toFixed(0);
+            });
+            
+            return forecast;
+        }
+
+        // Report Formatting Functions
+        function formatProfitabilityReport(data) {
+            let html = '<div style="font-family: monospace; white-space: pre-line;">';
+            html += 'PROFITABILITY ANALYSIS BY STORE\n';
+            html += '================================\n\n';
+            
+            Object.keys(data).forEach(store => {
+                const d = data[store];
+                html += `${store}\n`;
+                html += `  Revenue: €${d.revenue}\n`;
+                html += `  Costs:   €${d.costs}\n`;
+                html += `  Profit:  €${d.profit}\n`;
+                html += `  Margin:  ${d.margin}%\n\n`;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+
+        function formatLaborReport(data) {
+            let html = '<div style="font-family: monospace; white-space: pre-line;">';
+            html += 'EMPLOYEE PRODUCTIVITY ANALYSIS\n';
+            html += '==============================\n\n';
+            
+            Object.keys(data).forEach(employee => {
+                const d = data[employee];
+                html += `${employee} (${d.store})\n`;
+                html += `  Total Hours: ${d.totalHours.toFixed(1)}\n`;
+                html += `  Avg Hours/Shift: ${d.avgHoursPerShift}\n`;
+                html += `  Revenue/Hour: €${d.revenuePerHour}\n`;
+                html += `  Productivity: €${d.productivity}/hour\n\n`;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+
+        function formatTrendReport(data) {
+            let html = '<div style="font-family: monospace; white-space: pre-line;">';
+            html += 'MONTHLY PERFORMANCE TRENDS\n';
+            html += '==========================\n\n';
+            
+            Object.keys(data).sort().forEach(month => {
+                const d = data[month];
+                const profit = d.revenue - d.costs;
+                html += `${month}\n`;
+                html += `  Revenue: €${d.revenue.toFixed(0)}\n`;
+                html += `  Costs:   €${d.costs.toFixed(0)}\n`;
+                html += `  Profit:  €${profit.toFixed(0)}\n`;
+                html += `  Hours:   ${d.hours.toFixed(0)}\n`;
+                html += `  Shifts:  ${d.shifts}\n\n`;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+
+        function formatComplianceReport(data) {
+            let html = '<div style="font-family: monospace; white-space: pre-line;">';
+            html += 'LABOR COMPLIANCE ANALYSIS\n';
+            html += '=========================\n\n';
+            html += `Total Shifts: ${data.totalShifts}\n`;
+            html += `Overtime Shifts: ${data.overtimeShifts} (${(data.overtimeShifts/data.totalShifts*100).toFixed(1)}%)\n`;
+            html += `Excessive Hours (>10h): ${data.excessiveHours}\n`;
+            html += `Weekend Work: ${data.weekendWork}\n`;
+            html += `Compliance Score: ${data.complianceScore}%\n\n`;
+            html += 'RECOMMENDATIONS:\n';
+            if (data.overtimeShifts > data.totalShifts * 0.1) {
+                html += '• Consider hiring additional staff to reduce overtime\n';
+            }
+            if (data.excessiveHours > 0) {
+                html += '• Review scheduling to prevent excessive work hours\n';
+            }
+            html += '• Ensure compliance with local labor regulations\n';
+            html += '</div>';
+            return html;
+        }
+
+        function formatBenchmarkReport(data) {
+            let html = '<div style="font-family: monospace; white-space: pre-line;">';
+            html += 'INDUSTRY BENCHMARKING\n';
+            html += '====================\n\n';
+            html += `                     Industry    Actual    Performance\n`;
+            html += `Revenue/Hour         €${data.industry.avgRevenuePerHour}      €${data.actual.avgRevenuePerHour}      ${data.actual.avgRevenuePerHour > data.industry.avgRevenuePerHour ? 'Above' : 'Below'}\n`;
+            html += `Labor Cost %         ${data.industry.avgLaborCostPercentage}%       ${data.actual.laborCostPercentage}%       ${data.actual.laborCostPercentage < data.industry.avgLaborCostPercentage ? 'Better' : 'Higher'}\n`;
+            html += `Profit Margin        ${data.industry.avgProfitMargin}%       ${data.actual.profitMargin}%       ${data.actual.profitMargin > data.industry.avgProfitMargin ? 'Above' : 'Below'}\n`;
+            html += `Hours/Employee       ${data.industry.avgHoursPerEmployee}        ${data.actual.avgHoursPerEmployee}        ${data.actual.avgHoursPerEmployee > data.industry.avgHoursPerEmployee ? 'Above' : 'Below'}\n`;
+            html += '</div>';
+            return html;
+        }
+
+        function formatForecastReport(data) {
+            let html = '<div style="font-family: monospace; white-space: pre-line;">';
+            html += 'FINANCIAL FORECAST (Next 3 Months)\n';
+            html += '===================================\n\n';
+            
+            Object.keys(data).forEach(period => {
+                const d = data[period];
+                const periodName = period.replace(/([A-Z])/g, ' $1').toLowerCase().replace(/^./, str => str.toUpperCase());
+                html += `${periodName}\n`;
+                html += `  Projected Revenue: €${d.revenue}\n`;
+                html += `  Projected Costs:   €${d.costs}\n`;
+                html += `  Projected Profit:  €${d.profit}\n\n`;
+            });
+            
+            html += 'NOTE: Forecasts based on historical trends and may vary based on market conditions.\n';
+            html += '</div>';
+            return html;
+        }
+
+        // Utility Functions
+        function displayReportModal(title, content) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); z-index: 10000;
+                display: flex; align-items: center; justify-content: center;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 15px; padding: 30px; max-width: 800px; 
+                           width: 90%; max-height: 80vh; overflow-y: auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="margin: 0; color: #2c3e50;">${title}</h2>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" 
+                                style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                    </div>
+                    ${content}
+                    <div style="margin-top: 20px; text-align: right;">
+                        <button onclick="exportReport('${title}', this)" class="btn btn-primary">Export Report</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+        }
+
+        function exportReport(title, button) {
+            const content = button.parentElement.parentElement.querySelector('div[style*="monospace"]').textContent;
+            const filename = `${title.toLowerCase().replace(/\s+/g, '_')}_report.txt`;
+            downloadFile(content, filename, 'text/plain');
+            showNotification(`${title} exported successfully!`, 'success');
+        }
+
+        function downloadFile(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingOverlay').style.display = show ? 'flex' : 'none';
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed; top: 20px; right: 20px; z-index: 9999;
+                padding: 15px 20px; border-radius: 10px; font-weight: 600;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                transition: all 0.3s ease;
+            `;
+            
+            const colors = {
+                success: 'background: #27ae60; color: white;',
+                warning: 'background: #f39c12; color: white;',
+                error: 'background: #e74c3c; color: white;',
+                info: 'background: #3498db; color: white;'
+            };
+            
+            notification.style.cssText += colors[type] || colors.info;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        function drillDownStore(storeName) {
+            showNotification(`Analyzing ${storeName} performance...`, 'info');
+            // This would typically open a detailed store analysis
+            console.log(`Drill down analysis for ${storeName}`);
+        }
+
+        function refreshAlerts() {
+            generateBusinessAlerts();
+            showNotification('Business alerts refreshed!', 'success');
+        }
+
+        function exportStoreComparison() {
+            const storeData = {};
+            Object.keys(STORES).forEach(store => {
+                const storeRecords = businessData.timeRecords.filter(r => r.store === store);
+                const revenue = storeRecords.reduce((sum, r) => sum + parseFloat(r.revenueGenerated), 0);
+                const costs = storeRecords.reduce((sum, r) => sum + (parseFloat(r.hoursWorked) * r.hourlyRate), 0);
+                storeData[store] = { revenue, costs, profit: revenue - costs };
+            });
+            
+            let csvContent = "Store Comparison Report\n";
+            csvContent += "Store,Revenue,Costs,Profit,Margin\n";
+            
+            Object.keys(storeData).forEach(store => {
+                const data = storeData[store];
+                const margin = data.revenue > 0 ? ((data.profit / data.revenue) * 100).toFixed(2) : 0;
+                csvContent += `${store},€${data.revenue.toFixed(2)},€${data.costs.toFixed(2)},€${data.profit.toFixed(2)},${margin}%\n`;
+            });
+            
+            downloadFile(csvContent, 'store_comparison_report.csv', 'text/csv');
+            showNotification('Store comparison report exported!', 'success');
+        }
+
+        // Chart functions (placeholders - would integrate with Chart.js or similar)
+        function updateRevenueChart() {
+            const timeframe = document.getElementById('revenueTimeframe').value;
+            console.log(`Updating revenue chart for timeframe: ${timeframe}`);
+            // Chart update logic would go here
+        }
+
+        function updateCostChart() {
+            console.log('Updating cost chart...');
+            // Chart update logic would go here
+        }
+
+    </script>
+</body>
+</html>
